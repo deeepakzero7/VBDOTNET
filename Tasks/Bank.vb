@@ -1,4 +1,23 @@
-   Class BankAccount
+Imports System
+
+Module Program
+    Sub Main(args As String())
+        Console.WriteLine("Hello World!")
+        'Dim bookobj As Library = New Library
+        'bookobj.getlib()
+
+        'Dim trainobj As train = New train
+        'trainobj.result()
+        'trainobj.tickets()
+
+
+        'Dim bankobj As bank = New bank
+        'bankobj.createaccount()
+
+        Dim account As BankAccount = CreateAccount()
+        Console.WriteLine("Bank Account Created Successfully!")
+      End Sub
+Class BankAccount
         Private accountNumber As Integer
         Private ownerName As String
         Private balance As Double
