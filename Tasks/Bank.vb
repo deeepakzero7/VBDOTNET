@@ -16,7 +16,40 @@ Module Program
 
         Dim account As BankAccount = CreateAccount()
         Console.WriteLine("Bank Account Created Successfully!")
-      End Sub
+      While True
+            Console.WriteLine()
+            Console.WriteLine("1. Print Account Details")
+            Console.WriteLine("2. Print Transaction History")
+            Console.WriteLine("3. Deposit Funds")
+            Console.WriteLine("4. Withdraw Funds")
+            Console.WriteLine("5. Exit")
+            Console.WriteLine()
+            Console.Write("Enter your choice: ")
+            Dim choice As Integer = Integer.Parse(Console.ReadLine())
+
+            Select Case choice
+                Case 1
+                    account.PrintAccountDetails()
+                Case 2
+                    account.PrintTransactionHistory()
+                Case 3
+                    Console.Write("Enter amount to deposit: $")
+                    Dim depositAmount As Double = Double.Parse(Console.ReadLine())
+                    account.Deposit(depositAmount)
+                    Console.WriteLine("Funds deposited successfully!")
+                Case 4
+                    Console.Write("Enter amount to withdraw: $")
+                    Dim withdrawalAmount As Double = Double.Parse(Console.ReadLine())
+                    account.Withdraw(withdrawalAmount)
+                Case 5
+                    Exit While
+                Case Else
+                    Console.WriteLine("Invalid choice. Please try again.")
+            End Select
+        End While
+
+
+    End Sub
 Class BankAccount
         Private accountNumber As Integer
         Private ownerName As String
