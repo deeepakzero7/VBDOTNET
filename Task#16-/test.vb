@@ -1,5 +1,8 @@
 Imports System
 Imports System.Net
+Imports System.Reflection.Metadata
+Imports System.Text.RegularExpressions
+Imports System.Exception
 
 Module Program
     Sub Main(args As String())
@@ -9,11 +12,12 @@ Module Program
 
         'task zero
         Dim all As Listemployee = New Listemployee
+
         GetDetails()
+        'Console.WriteLine("Program end ...press enter to execute next program")
 
 
-        ' 1 st question
-
+        ' 1 st question 
 
         'Dim em As Emp = New Emp
         'em.GetEmployeeInfo()
@@ -135,30 +139,22 @@ Module Program
         'Console.ReadLine()
         'Console.WriteLine("Program end ...press enter to execute next program")
 
-        '8th question
-        'Console.WriteLine("Enter Student name")
+        ''8th question
+        'Dim phdStudent As IExam = New PhdStudent()
+        'phdStudent.TakeExam()
 
-        'Dim x As String = Console.ReadLine()
-        'Console.WriteLine("Enter Student name")
-        'Dim y As String = Console.ReadLine()
+        'Dim gradStudent As IExam = New GradStudent()
+        'gradStudent.TakeExam()
+
+        'Console.ReadLine()
 
 
-
-        'Dim phdStudente As New PhdStudentn(x)
-        'Dim gradStudente As New GradStudentn(y)
-
-        'Dim students As Studente() = {phdStudente, gradStudente}
-
-        'For Each student As Studente In students
-        '    Console.WriteLine("Student: " & student.GetName())
-        '    student.TakeExam()
-        '    Console.WriteLine("--------------------")
-        'Next
+        'Console.ReadLine()
         'Console.WriteLine("Program end ...press enter to execute next program")
 
         '''''''''''''''''''''''''''''''''''
         ' #last one
-        indexi()
+        'indexi()
 
 
 
@@ -168,52 +164,84 @@ Module Program
 
 
 
-        Public Class Listemployee
-            Public Property Id As Integer
-            Public Property Name As String
-            Public Property Salary As Double
-            Public Property YearsOfExperience As Integer
-        End Class
+    Public Class Listemployee
+        Public Property Id As Integer
+        Public Property Name As String
+        Public Property Salary As Double
+        Public Property YearsOfExperience As Integer
+    End Class
 
-        Sub GetDetails()
-            Dim employees As New List(Of Listemployee)()
+    Sub GetDetails()
+        Dim employees As New List(Of Listemployee)()
 
-            Console.Write("Enter the number of employees: ")
-            Dim numberOfEmployees As Integer = Integer.Parse(Console.ReadLine())
-
-        For i As Integer = 1 To numberOfEmployees
-                Console.WriteLine("Enter details for employee #" & i)
-                Dim emp As New Listemployee()
+        Console.Write("Enter the number of employees: ")
 
 
-                Try
-                    Console.Write("Employee ID: ")
-                    emp.Id = GetValidIntegerInput()
+        For i As Integer = 1 To getnoemp()
+            Console.WriteLine("Enter details for employee #" & i)
+            Dim emp As New Listemployee()
 
-                    Console.Write("Name: ")
-                    emp.Name = GetValidStringInput()
 
-                    Console.Write("Salary: ")
-                    emp.Salary = GetValidDoubleInput()
+            Try
+                Console.Write("Employee ID: ")
+                emp.Id = GetValidIntegerInput()
 
-                    Console.Write("Years of Experience: ")
-                    emp.YearsOfExperience = GetValidIntegerInput()
+                Console.Write("Enter the Name of employee: ")
+                emp.Name = getName()
 
-                    employees.Add(emp)
-                Catch ex As Exception
-                    Console.WriteLine(ex.Message)
-                    i -= 1
-                End Try
-            Next
+                Console.Write("Salary: ")
+                emp.Salary = GetValidDoubleInput()
 
-            For Each emp As Listemployee In employees
-                PrintEmployeeDetails(emp)
-            Next
+                Console.Write("Years of Experience: ")
+                emp.YearsOfExperience = GetValidIntegerInput()
 
-            Console.ReadLine()
-        End Sub
+                employees.Add(emp)
+            Catch ex As Exception
+                Console.WriteLine(ex.Message)
 
-        Sub PrintEmployeeDetails(emp As Listemployee)
+                i -= 1
+            End Try
+        Next
+
+        For Each emp As Listemployee In employees
+            PrintEmployeeDetails(emp)
+        Next
+
+        Console.ReadLine()
+    End Sub
+    Function getnoemp()
+        Dim user As Integer
+        Try
+            user = Convert.ToInt64(Console.ReadLine())
+
+        Catch ex As FormatException
+            Console.WriteLine("Enter valid Integer value")
+            user = getnoemp()
+
+        End Try
+
+        Return user
+    End Function
+
+    Function getName()
+        Dim namee As String
+
+        Try
+            namee = Console.ReadLine()
+            Dim pattern As String = "^[a-zA-Z ]+$"
+            If Not Regex.Match(namee, pattern).Success Then
+                Console.WriteLine("Name Should Only contains Alphabets")
+                getName()
+            End If
+        Catch ex As FormatException
+
+            getName()
+        End Try
+        Return namee
+    End Function
+
+
+    Sub PrintEmployeeDetails(emp As Listemployee)
             If emp.YearsOfExperience > 8 AndAlso emp.Salary >= 100000 AndAlso emp.Salary < 200000 Then
                 Console.WriteLine("-----------------------------------------------------------------------------")
                 Console.WriteLine("Employee ID: " & emp.Id)
@@ -225,21 +253,28 @@ Module Program
             End If
         End Sub
 
-        Function GetValidIntegerInput() As Integer
-            Dim userInput As String
-            Dim validInput As Integer
 
-            While True
-                userInput = Console.ReadLine()
-                If Integer.TryParse(userInput, validInput) Then
-                    Return validInput
-                Else
-                    Console.WriteLine("Invalid input. Please enter a valid integer.")
-                End If
-            End While
-        End Function
 
-        Function GetValidDoubleInput() As Double
+
+
+    Function GetValidIntegerInput() As Integer
+        Dim userInput As String
+        Dim validInput As Integer
+
+        While True
+            userInput = Console.ReadLine()
+            If Integer.TryParse(userInput, validInput) Then
+                Return validInput
+            Else
+                Console.WriteLine("Invalid input. Please enter a valid integer.")
+            End If
+        End While
+    End Function
+
+
+
+
+    Function GetValidDoubleInput() As Double
             Dim userInput As String
             Dim validInput As Double
 
@@ -601,12 +636,9 @@ Module Program
                 SetAccountBalance(balance)
             End Sub
 
-            Public Sub New()
-                ' Default constructor
-            End Sub
 
-            ' Encapsulated setters
-            Public Sub SetAccountNumber(ByVal number As Integer)
+        ' Encaps set
+        Public Sub SetAccountNumber(ByVal number As Integer)
                 accountNumber = number
             End Sub
 
@@ -618,8 +650,8 @@ Module Program
                 accountBalance = balance
             End Sub
 
-            ' Encapsulated getters
-            Public Function GetAccountNumber() As Integer
+        ' Encaps get
+        Public Function GetAccountNumber() As Integer
                 Return accountNumber
             End Function
 
@@ -672,43 +704,27 @@ Module Program
 
 
 
+    '#8
 
 
-        Public MustInherit Class Studente
-            Private _name As String
 
-            Public Sub New(name As String)
-                _name = name
-            End Sub
+    Public Interface IExam
+            Sub TakeExam()
+        End Interface
 
-            Public Function GetName() As String
-                Return _name
-            End Function
+        Public Class PhdStudent
+            Implements IExam
 
-            Public MustOverride Sub TakeExam()
-        End Class
-
-        Public Class PhdStudentn
-            Inherits Studente
-
-            Public Sub New(name As String)
-                MyBase.New(name)
-            End Sub
-
-            Public Overrides Sub TakeExam()
-                Console.WriteLine($"{GetName()} is giving the final presentation.")
+            Public Sub TakeExam() Implements IExam.TakeExam
+                Console.WriteLine("PhD student is giving his final presentation.")
             End Sub
         End Class
 
-        Public Class GradStudentn
-            Inherits Studente
+        Public Class GradStudent
+            Implements IExam
 
-            Public Sub New(name As String)
-                MyBase.New(name)
-            End Sub
-
-            Public Overrides Sub TakeExam()
-                Console.WriteLine($"{GetName()} is writing a research paper.")
+            Public Sub TakeExam() Implements IExam.TakeExam
+                Console.WriteLine("Graduate student is giving a written paper.")
             End Sub
         End Class
 
@@ -716,13 +732,8 @@ Module Program
 
 
 
-
-
-
-
-    ''' <summary>
-    ''' ''''''''''''''''''''''''''''''''''''''
-    ''' </summary>
+    '''' 
+    ''' #9
     ''' 
     Class Patient
         Private patientName As String
@@ -872,10 +883,17 @@ Module Program
         Console.ReadLine()
     End Sub
 
-
-
-
-
-
-
 End Module
+
+
+'''' <summary>
+'''
+''' 
+''' 
+''' Imports System
+
+
+'
+'
+'
+'
